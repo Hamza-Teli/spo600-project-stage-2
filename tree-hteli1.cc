@@ -97,14 +97,12 @@ namespace{
                         const char* functionName = IDENTIFIER_POINTER(DECL_NAME(func->decl));
 
                         // Lets print the base name
-                        fprintf(dump_file, "%s\n", baseName);
+                        fprintf(dump_file, "%s\n", functionName);
                     }
                 }
 
                 // Return value
                 return 0;
-
-
             }
     };
 }
