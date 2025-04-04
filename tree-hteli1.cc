@@ -116,8 +116,6 @@ namespace{
                             continue;
                         }
                         
-                        
-
                         // Get the suffix first
                         std::string suffix = functionName.substr(dot + 1);
 
@@ -129,11 +127,43 @@ namespace{
                           // Show an output
                           fprintf(dump_file, "Resolver was found for base function: %s\n", baseName.c_str());
                         }
-
-                        
                     }
 
                     // Second pass goes here where we use the names inside our map and find all the variants
+                    FOR_EACH_FUNCTION(node) {
+                        // Get the function pointer
+                        function *current_function_pointer = node->get_fun();
+
+                        // Validate
+                        if (!current_function_pointer)
+                            continue;
+                        // Get the complete funciton name
+                        std::string functionName(function_name(current_function_pointer));
+
+                        // Get the dot
+                        size_t dot = functionName.find('.');
+
+                        // Check if the dot is there
+                        if (dot== std::string::npos){
+                            continue;
+                        }
+                        
+                        // Get the suffix first
+                        std::string suffix = functionName.substr(dot + 1);
+
+                        // Now we check that if the function has a resolver suffix, we simply store its base name
+                        if (suffix == "resolver") {  
+                            continue;
+                        }
+                        
+                        // Get base name
+                        std::string baseName = functionName.substr(0, dot);
+
+                        // Now we check if base has a resolver
+                        if (resolverMap.find(baseName) != resolverMap.end()) {
+                            fprintf(dump_file, "Clone variant successfully found: %s (base function: %s) with resolver: %s\n", functionName.c_str(), baseName.c_str(), resolverMap[baseName].c_str());
+                        }
+                    }
                 }
 
                 // Return value
