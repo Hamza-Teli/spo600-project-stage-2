@@ -77,13 +77,6 @@ namespace{
             // The execute function: this is where the magic happens
             unsigned int execute (function *func) override {
 
-                // Declarations
-                // Count the number of basic blocks
-                unsigned int number_of_basic_blocks = 0;
-
-                // Count the number of Gimple statements
-                unsigned int number_of_gimple_statements = 0;
-
                 // Instantiate function name
                 /* 
                     Inside function.cc, there's a function_name method that returns
@@ -91,33 +84,23 @@ namespace{
                     https://github.com/gcc-mirror/gcc/blob/master/gcc/function.cc
 
                 */
-                const char* functionName = function_name(func);
+                //const char* functionName = function_name(func);
 
-                // Print the name of each function being compiled
+                // This is where we will get started with identifying the functions that have been cloned
                 if (dump_file) {
-                    fprintf(dump_file, "Function: %s\n", functionName);
-                }
+                    
+                    // Use cgraph node
+                    cgraph_node *node;
+                    // Lets use FOR_EACH_FUNCTION
+                    FOR_EACH_FUNCTION(node) {
+                        // Get the complete funciton anme name
+                        const char* functionName = IDENTIFIER_POINTER(DECL_NAME(func->decl));
 
-
-                // Now we use the macro FOR_EACH_FUNCTION to get the number of basic blocks
-                // and print the number of gimple statements in each function
-                basic_block BB;
-                FOR_EACH_BB_FN(BB, func) {
-                    // Increment
-                    number_of_basic_blocks++;
-
-                    // Now for each basic block, iterate using the gimple iterator in the wiki
-                    // Credit: http://spo600.cdot.systems/doku.php?id=spo600:creating_a_gcc_pass
-
-                    for (gimple_stmt_iterator gsi = gsi_start_bb (BB); !gsi_end_p (gsi); gsi_next(&gsi)) {
-                        number_of_gimple_statements++;
+                        // Lets print the base name
+                        fprintf(dump_file, "%s\n", baseName);
                     }
                 }
 
-                // Now we can print the basic blocks
-                if (dump_file) {
-                    fprintf(dump_file, "---- Function: %s | Basic Blocks: %u, | Gimple Statements: %u\n", functionName, number_of_basic_blocks,  number_of_gimple_statements);
-                }                
                 // Return value
                 return 0;
 
