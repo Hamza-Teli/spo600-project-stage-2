@@ -30,6 +30,9 @@ This pass accomplishes the following:
 #include "intl.h"
 #include "function.h"
 #include "basic-block.h"
+#include <string>
+#include <map>
+#include <cstdio>
 
 
 
@@ -88,16 +91,46 @@ namespace{
 
                 // This is where we will get started with identifying the functions that have been cloned
                 if (dump_file) {
+
+                    // Lets create a map that holds the functions
+                    std::map<std::string, std::string> resolverMap;
                     
                     // Use cgraph node
                     cgraph_node *node;
                     // Lets use FOR_EACH_FUNCTION
                     FOR_EACH_FUNCTION(node) {
-                        // Get the complete funciton anme name
-                        const char* functionName = IDENTIFIER_POINTER(DECL_NAME(func->decl));
+                        // Get the function pointer
+                        function *current_function_pointer = node->get_fun();
 
-                        // Lets print the base name
-                        fprintf(dump_file, "%s\n", functionName);
+                        // Validate
+                        if (!curr_fun)
+                            continue;
+                        // Get the complete funciton name
+                        std::string functionName(function_name(current_function_pointer));
+
+                        // Get the dot
+                        size_t dot = functionName.find('.');
+
+                        // Check if the dot is there
+                        if (dot== std::string::npos){
+                            continue;
+                        }
+                        
+                        
+
+                        // Get the suffix first
+                        std::string suffix = functionName.substr(dot + 1);
+
+                        // Now we check that if the function has a resolver suffix, we simply store its base name
+                        if (suffix == "resolver") {
+                          std::string baseName = functionName.substr(0, dot);
+                          resolverMap[baseName] = functionName;
+
+                          // Show an output
+                          fprintf(dump_file, "Resolver was found for base function: %s\n", baseName.c_str());
+                        }
+
+                        
                     }
                 }
 
