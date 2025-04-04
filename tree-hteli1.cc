@@ -87,7 +87,7 @@ namespace{
                     https://github.com/gcc-mirror/gcc/blob/master/gcc/function.cc
 
                 */
-                //const char* functionName = function_name(func);
+                const char* function_Name = function_name(func);
 
                 // This is where we will get started with identifying the functions that have been cloned
                 if (dump_file) {
@@ -103,7 +103,7 @@ namespace{
                         function *current_function_pointer = node->get_fun();
 
                         // Validate
-                        if (!curr_fun)
+                        if (!current_function_pointer)
                             continue;
                         // Get the complete funciton name
                         std::string functionName(function_name(current_function_pointer));
@@ -132,6 +132,8 @@ namespace{
 
                         
                     }
+
+                    // Second pass goes here where we use the names inside our map and find all the variants
                 }
 
                 // Return value
