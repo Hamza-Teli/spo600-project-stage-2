@@ -78,7 +78,7 @@ namespace{
             }
 
             // The execute function: this is where the magic happens
-            unsigned int execute (function *func) override {
+            unsigned int execute (function * /*func*/) override {
 
                 // Instantiate function name
                 /* 
@@ -87,7 +87,7 @@ namespace{
                     https://github.com/gcc-mirror/gcc/blob/master/gcc/function.cc
 
                 */
-                const char* function_Name = function_name(func);
+                //const char* function_Name = function_name(func);
 
                 // This is where we will get started with identifying the functions that have been cloned
                 if (dump_file) {
