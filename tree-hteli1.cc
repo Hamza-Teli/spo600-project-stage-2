@@ -65,7 +65,8 @@ namespace{
     // This is where you identify the class
     class pass_hteli1 : public gimple_opt_pass {
         public:
-            // Constructor
+
+            // Constructor -------------------
             pass_hteli1(gcc::context *ctxt) : gimple_opt_pass(pass_data_hteli1, ctxt) {
 
             }
@@ -79,27 +80,24 @@ namespace{
 
             // The execute function: this is where the magic happens
             unsigned int execute (function * /*func*/) override {
+                // I created a static flag to ensure it only prints once
+                static bool end = false;
+                if (end) {
+                    return 0;
+                }
 
-                // Instantiate function name
-                /* 
-                    Inside function.cc, there's a function_name method that returns
-                    the name of a function. Check out line 6454:
-                    https://github.com/gcc-mirror/gcc/blob/master/gcc/function.cc
+                // Lets create a map that holds the functions
+                std::map<std::string, std::string> resolverMap;
 
-                */
-                //const char* function_Name = function_name(func);
+                // another map to store the variant functions (the key is the basename and corresponding values are variants)
+                std::map<std::string, std::vector<std::string>> variantMap;
+                
+                // Use cgraph node
+                cgraph_node *node;
 
                 // This is where we will get started with identifying the functions that have been cloned
                 if (dump_file) {
 
-                    // Lets create a map that holds the functions
-                    std::map<std::string, std::string> resolverMap;
-
-                    // another map to store the variant functions (the key is the basename and corresponding values are variants)
-                    std::map<std::string, std::vector<std::string>> variantMap;
-                    
-                    // Use cgraph node
-                    cgraph_node *node;
                     // Lets use FOR_EACH_FUNCTION
                     FOR_EACH_FUNCTION(node) {
                         // Get the function pointer
@@ -163,8 +161,9 @@ namespace{
                         // Check if the dot is there
                         if (dot== std::string::npos){
                             // If there is no dot then we treat it as a default one
-                            baseName = functionName + ".default";
+                            baseName = functionName;
                             suffix = "default";
+                            functionName = baseName + ".default";
                         } 
                         else {
                             baseName = functionName.substr(0, dot);
@@ -185,9 +184,14 @@ namespace{
                         }
                     }
 
-                    // Custom function that prints the map created
-                    print_all_cloned_variants(variantMap, resolverMap);
+                    
                 }
+
+                // Custom function that prints the map created
+                print_all_cloned_variants(variantMap, resolverMap);
+                
+                // Set end to true
+                end = true;
 
                 // Return value
                 return 0;
