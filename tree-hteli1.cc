@@ -193,6 +193,9 @@ namespace{
                 // Set end to true
                 end = true;
 
+                // Compare the functions
+                compare_the_cloned_functions(variantMap);
+
                 // Return value
                 return 0;
             }
@@ -219,6 +222,56 @@ namespace{
                 }
             }
 
+            // This function will compare the two variants for each base function.
+            // If the two functions are identical then it will print PRUNE, if not then NOPRUNE
+            void compare_the_cloned_functions(const std::map<std::string, std::vector<std::string string>> &variantMap) {
+                // Lets loop and see if we have two variants
+                for (const auto &each_variant : variantMap) {
+
+                    // Get the key and values
+                    const std::string &baseName = each_variant.first;
+                    const std::vector<std::string> &variantValues = each_variant.second;
+
+                    // We assume that each base function has two clones
+                    if (variantValues.size()!=2) {
+                        fprintf(dump_file, "The number of variants for %s are not %d", baseName.c_str(), 2);
+                        continue;
+                    }
+
+                    // Instantiate function pointers
+                    function *functionOne = nullptr;
+                    function *functionTwo = nullptr;
+
+                    // Same logic as before
+                    cgraph_node *node;
+                    // Loop through each function and return the function we need
+                    FOR_EACH_FUNCTION(node) {
+                        function *fun = node->get_fun();
+
+                        // Validate it
+                        if (!f) {
+                            continue;
+                        }
+                        std::string functionName(function_name(f));
+                        // 
+                        if (functionName == variantValues[0] || (functionName + ".default") == variantValues[0]) {
+                            functionOne = f;
+                        }
+                        else if (functionName == variantValues[1] || (functionName + ".default") == variantValues) {
+                            functionTwo = f;
+                        }
+
+                        // Validate if both are valid
+                        if (!functionOne || !functionTwo) {
+                            fprintf(dump_file, "ERROR! Function 1 and function 2 could not be retrieved. Check the logic!\n");
+                        }
+                        else 
+                        {
+                            fprintf(dump_file, "Successfully retrieved both function 1 and two, the addresses are as follows: %p,  %p \n", &functionOne, &functionTwo)
+                        }
+                    }
+                }
+            }
     };
 }
 
