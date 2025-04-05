@@ -257,7 +257,7 @@ namespace{
                         if (functionName == variantValues[0] || (functionName + ".default") == variantValues[0]) {
                             functionOne = fun;
                         }
-                        else if (functionName == variantValues[1] || (functionName + ".default") == variantValues) {
+                        else if (functionName == variantValues[1] || (functionName + ".default") == variantValues[1]) {
                             functionTwo = fun;
                         }
 
