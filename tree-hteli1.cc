@@ -128,6 +128,7 @@ namespace{
                           resolverMap[baseName] = functionName;
 
                           // Show an output
+                          fprintf(dump_file, "--------------------------------------------------------------------------------\n");
                           fprintf(dump_file, "**** ---> Resolver was found for base function: %s\n", baseName.c_str());
                         }
                     }
@@ -171,6 +172,7 @@ namespace{
                         if (resolverMap.find(baseName) != resolverMap.end()) {
                             variantMap[baseName].push_back(functionName);
                             fprintf(dump_file, "**** ---> Clone variant successfully found: %s (base function: %s) with resolver: %s\n", functionName.c_str(), baseName.c_str(), resolverMap[baseName].c_str());
+                            fprintf(dump_file, "--------------------------------------------------------------------------------\n");
                         }
                     }
 
@@ -193,7 +195,6 @@ namespace{
 
                     // Now we print the resolver in a nice clean matter
                     fprintf(dump_file, "------------------------- Summary --------------------------\n");
-                    fprintf(dump_file, "\n-----------------------------------------------------------\n");
                     fprintf(dump_file, "Resolver Function: %s\n", resolverMap.at(baseName).c_str());
 
                     // Now simply print the variants for that resolver function
