@@ -94,6 +94,9 @@ namespace{
 
                     // Lets create a map that holds the functions
                     std::map<std::string, std::string> resolverMap;
+
+                    // another map to store the variant functions (the key is the basename and corresponding values are variants)
+                    std::map<std::string, std::vector<std::string>> variantMap;
                     
                     // Use cgraph node
                     cgraph_node *node;
@@ -161,14 +164,39 @@ namespace{
 
                         // Now we check if base has a resolver
                         if (resolverMap.find(baseName) != resolverMap.end()) {
+                            variantMap[baseName].push_back(functionName)
                             fprintf(dump_file, "Clone variant successfully found: %s (base function: %s) with resolver: %s\n", functionName.c_str(), baseName.c_str(), resolverMap[baseName].c_str());
                         }
                     }
+
+                    // Custom function that prints the map created
+                    print_all_cloned_variants(variantMap, resolverMap);
                 }
 
                 // Return value
                 return 0;
             }
+            
+            // This function will take the resolver map and corresponding variants and print them
+            void print_all_cloned_variants(const std::map<std::string, std::vector<std::string>> &variantMap, const std::map<std::string, std::string> &resolverMap) {
+
+                // Use for loop
+                for (const auto &element : variantMap) {
+                    // Get the key and value
+                    const std::string &baseName = element.first;
+                    const std::vector<std::string> &variants = element.second;
+
+                    // Now we print the resolver
+                    fprintf(dump_file, "Resolver Function: %s\n", resolverMap.at(baseName).c_str());
+
+                    // Now simply print the variants for that resolver function
+                    for (const auto &variant : variants) {
+                        fprintf(dump_file, "        Variant: %s\n", variant.c_str());
+                    }
+
+                }
+            }
+
     };
 }
 
