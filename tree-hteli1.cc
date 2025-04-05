@@ -249,16 +249,16 @@ namespace{
                         function *fun = node->get_fun();
 
                         // Validate it
-                        if (!f) {
+                        if (!fun) {
                             continue;
                         }
                         std::string functionName(function_name(f));
                         // 
                         if (functionName == variantValues[0] || (functionName + ".default") == variantValues[0]) {
-                            functionOne = f;
+                            functionOne = fun;
                         }
                         else if (functionName == variantValues[1] || (functionName + ".default") == variantValues) {
-                            functionTwo = f;
+                            functionTwo = fun;
                         }
 
                         // Validate if both are valid
