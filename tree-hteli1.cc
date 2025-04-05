@@ -224,7 +224,7 @@ namespace{
 
             // This function will compare the two variants for each base function.
             // If the two functions are identical then it will print PRUNE, if not then NOPRUNE
-            void compare_the_cloned_functions(const std::map<std::string, std::vector<std::string string>> &variantMap) {
+            void compare_the_cloned_functions(const std::map<std::string, std::vector<std::string>> &variantMap) {
                 // Lets loop and see if we have two variants
                 for (const auto &each_variant : variantMap) {
 
