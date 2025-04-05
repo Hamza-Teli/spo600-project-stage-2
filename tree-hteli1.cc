@@ -128,7 +128,7 @@ namespace{
                           resolverMap[baseName] = functionName;
 
                           // Show an output
-                          fprintf(dump_file, "Resolver was found for base function: %s\n", baseName.c_str());
+                          fprintf(dump_file, "**** ---> Resolver was found for base function: %s\n", baseName.c_str());
                         }
                     }
 
@@ -143,29 +143,34 @@ namespace{
                         // Get the complete funciton name
                         std::string functionName(function_name(current_function_pointer));
 
+                        // Instantiate the variables
+                        std::string baseName;
+                        std::string suffix;
+
                         // Get the dot
                         size_t dot = functionName.find('.');
 
                         // Check if the dot is there
                         if (dot== std::string::npos){
-                            continue;
+                            // If there is no dot then we treat it as a default one
+                            baseName = functionName + ".default";
+                            suffix = "default";
+                        } 
+                        else {
+                            baseName = functionName.substr(0, dot);
+                            suffix = functionName.substr(dot + 1);
                         }
                         
-                        // Get the suffix first
-                        std::string suffix = functionName.substr(dot + 1);
 
-                        // Now we check that if the function has a resolver suffix, we simply store its base name
+                        // Now we check that if the function has a resolver suffix, if so just continue
                         if (suffix == "resolver") {  
                             continue;
                         }
-                        
-                        // Get base name
-                        std::string baseName = functionName.substr(0, dot);
-
+                
                         // Now we check if base has a resolver
                         if (resolverMap.find(baseName) != resolverMap.end()) {
                             variantMap[baseName].push_back(functionName);
-                            fprintf(dump_file, "Clone variant successfully found: %s (base function: %s) with resolver: %s\n", functionName.c_str(), baseName.c_str(), resolverMap[baseName].c_str());
+                            fprintf(dump_file, "**** ---> Clone variant successfully found: %s (base function: %s) with resolver: %s\n", functionName.c_str(), baseName.c_str(), resolverMap[baseName].c_str());
                         }
                     }
 
@@ -186,13 +191,16 @@ namespace{
                     const std::string &baseName = element.first;
                     const std::vector<std::string> &variants = element.second;
 
-                    // Now we print the resolver
+                    // Now we print the resolver in a nice clean matter
+                    fprintf(dump_file, "------------------------- Summary --------------------------\n");
+                    fprintf(dump_file, "\n-----------------------------------------------------------\n");
                     fprintf(dump_file, "Resolver Function: %s\n", resolverMap.at(baseName).c_str());
 
                     // Now simply print the variants for that resolver function
                     for (const auto &variant : variants) {
-                        fprintf(dump_file, "        Variant: %s\n", variant.c_str());
+                        fprintf(dump_file, " -------->  Variant: %s\n", variant.c_str());
                     }
+                    fprintf(dump_file, "-----------------------------------------------------------\n");
 
                 }
             }
