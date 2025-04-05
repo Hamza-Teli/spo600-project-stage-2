@@ -252,7 +252,7 @@ namespace{
                         if (!fun) {
                             continue;
                         }
-                        std::string functionName(function_name(f));
+                        std::string functionName(function_name(fun));
                         // 
                         if (functionName == variantValues[0] || (functionName + ".default") == variantValues[0]) {
                             functionOne = fun;
