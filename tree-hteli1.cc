@@ -267,7 +267,7 @@ namespace{
                         }
                         else 
                         {
-                            fprintf(dump_file, "Successfully retrieved both function 1 and two, the addresses are as follows: %p,  %p \n", functionOne, functionTwo);
+                            fprintf(dump_file, "Successfully retrieved both function 1 and two, the addresses are as follows: %p,  %p \n", (void*)functionOne, (void*)functionTwo);
                         }
                     }
                 }
