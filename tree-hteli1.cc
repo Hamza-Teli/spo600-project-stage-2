@@ -164,7 +164,7 @@ namespace{
 
                         // Now we check if base has a resolver
                         if (resolverMap.find(baseName) != resolverMap.end()) {
-                            variantMap[baseName].push_back(functionName)
+                            variantMap[baseName].push_back(functionName);
                             fprintf(dump_file, "Clone variant successfully found: %s (base function: %s) with resolver: %s\n", functionName.c_str(), baseName.c_str(), resolverMap[baseName].c_str());
                         }
                     }
