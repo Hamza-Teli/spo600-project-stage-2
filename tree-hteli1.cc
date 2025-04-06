@@ -286,6 +286,13 @@ namespace{
                         basicBlockCountForFunctionTwo++;
                     }
 
+                    // Lets print a basic block count for each function section here
+                    fprintf(dump_file, "\n---------------------------------------------------------\n")
+                    fprintf(dump_file, "----------------- Basic Block Counts ---------------------\n");
+                    fprintf(dump_file, "Function 1: Block Count %d\n", basicBlockCountForFunctionOne);
+                    fprintf(dump_file, "Function 2: Block Count %d\n", basicBlockCountForFunctionTwo);
+                    fprintf(dump_file, "---------------------------------------------------------\n")
+
                     // Set a flag
                     bool identical = false;
                     // What im doing here is checking if the basic block count is the same. The logic is that if the number of basic block counts differ across functions
