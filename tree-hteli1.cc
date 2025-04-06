@@ -286,11 +286,15 @@ namespace{
                         basicBlockCountForFunctionTwo++;
                     }
 
+                    // Function names
+                    std::string functionOneName = function_name(functionOne);
+                    std::string functionTwoName = function_name(functionTwo);
+
                     // Lets print a basic block count for each function section here
                     fprintf(dump_file, "\n---------------------------------------------------------\n");
                     fprintf(dump_file, "----------------- Basic Block Counts ---------------------\n");
-                    fprintf(dump_file, "Function 1: Block Count %d\n", basicBlockCountForFunctionOne);
-                    fprintf(dump_file, "Function 2: Block Count %d\n", basicBlockCountForFunctionTwo);
+                    fprintf(dump_file, "Function 1: (%s) Block Count %d\n", functionOneName, basicBlockCountForFunctionOne);
+                    fprintf(dump_file, "Function 2: (%s) Block Count %d\n", functionTwoName, basicBlockCountForFunctionTwo);
                     fprintf(dump_file, "---------------------------------------------------------\n");
 
                     // Set a flag
