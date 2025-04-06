@@ -296,6 +296,9 @@ namespace{
 
                     // Now check if it passes the first check
                     if(identical) {
+
+                        // Print that we passed the first check
+                        fprintf(dump_file, "Passed Check #1 (The number of basic block counts are the same for each function)\n");
                         // Now we can compare the gimple statement counts in each of the basic blocks
                         // Found the macro ENTRY_BLOCK_PTR_FOR_FN here -> https://github.com/gcc-mirror/gcc/blob/master/gcc/basic-block.h
                         basic_block basicBlockForFunctionOne = ENTRY_BLOCK_PTR_FOR_FN(functionOne)->next_bb;
@@ -315,8 +318,14 @@ namespace{
 
                             if (gimpleCountForFunctionOne != gimpleCountForFunctionTwo) {
                                 identical = false;
+
+                                // Print that the gimple count was not the same
+                                fprintf(dump_file,"XXXXX Failed Check #2 (The number of gimple statements differ between two function)\n");
                                 break;
                             }
+
+                            // Print that we passed the second check
+                            fprintf(dump_file, "Passed Check #2 (The number of GIMPLE counts are the same for each function)\n");
 
                             // So if it passes the check above we can now compare the statements in parallel
                             gimple_stmt_iterator gsiIteratorForFunctionOne = gsi_start_bb(basicBlockForFunctionOne);
