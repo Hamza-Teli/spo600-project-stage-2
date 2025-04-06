@@ -327,6 +327,13 @@ namespace{
                                 gimpleCountForFunctionTwo++;
                             }
 
+                            // Lets print a basic block count for each function section here
+                            fprintf(dump_file, "\n---------------------------------------------------------\n");
+                            fprintf(dump_file, "----------------- GIMPLE Counts ---------------------\n");
+                            fprintf(dump_file, "Function 1: (%s) Gimple Count %d\n", functionOneName.c_str(), gimpleCountForFunctionOne);
+                            fprintf(dump_file, "Function 2: (%s) Gimple Count %d\n", functionTwoName.c_str(), gimpleCountForFunctionTwo);
+                            fprintf(dump_file, "---------------------------------------------------------\n");
+
                             if (gimpleCountForFunctionOne != gimpleCountForFunctionTwo) {
                                 identical = false;
 
