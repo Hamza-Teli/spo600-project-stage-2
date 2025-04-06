@@ -210,7 +210,7 @@ namespace{
                     const std::vector<std::string> &variants = element.second;
 
                     // Now we print the resolver in a nice clean matter
-                    fprintf(dump_file, "------------------------- Summary --------------------------\n");
+                    fprintf(dump_file, "\n------------------------- Summary --------------------------\n");
                     fprintf(dump_file, "Resolver Function: %s\n", resolverMap.at(baseName).c_str());
 
                     // Now simply print the variants for that resolver function
