@@ -293,8 +293,8 @@ namespace{
                     // Lets print a basic block count for each function section here
                     fprintf(dump_file, "\n---------------------------------------------------------\n");
                     fprintf(dump_file, "----------------- Basic Block Counts ---------------------\n");
-                    fprintf(dump_file, "Function 1: (%s) Block Count %d\n", functionOneName, basicBlockCountForFunctionOne.c_str());
-                    fprintf(dump_file, "Function 2: (%s) Block Count %d\n", functionTwoName, basicBlockCountForFunctionTwo.c_str());
+                    fprintf(dump_file, "Function 1: (%s) Block Count %d\n", functionOneName.c_str(), basicBlockCountForFunctionOne);
+                    fprintf(dump_file, "Function 2: (%s) Block Count %d\n", functionTwoName.c_str(), basicBlockCountForFunctionTwo);
                     fprintf(dump_file, "---------------------------------------------------------\n");
 
                     // Set a flag
