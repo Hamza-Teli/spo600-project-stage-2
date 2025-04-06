@@ -260,15 +260,15 @@ namespace{
                         else if (functionName == variantValues[1] || (functionName + ".default") == variantValues[1]) {
                             functionTwo = fun;
                         }
+                    }
 
-                        // Validate if both are valid
-                        if (!functionOne || !functionTwo) {
-                            fprintf(dump_file, "ERROR! Function 1 and function 2 could not be retrieved. Check the logic!\n");
-                        }
-                        else 
-                        {
-                            fprintf(dump_file, "Successfully retrieved both function 1 and two, the addresses are as follows: %p,  %p \n", (void*)functionOne, (void*)functionTwo);
-                        }
+                    // Validate if both are valid
+                    if (!functionOne || !functionTwo) {
+                        fprintf(dump_file, "ERROR! Function 1 and function 2 could not be retrieved. Check the logic!\n");
+                    }
+                    else 
+                    {
+                        fprintf(dump_file, "Successfully retrieved both function 1 and two, the addresses are as follows: %p,  %p \n", (void*)functionOne, (void*)functionTwo);
                     }
                 }
             }
