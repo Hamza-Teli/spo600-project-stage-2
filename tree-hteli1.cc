@@ -270,6 +270,90 @@ namespace{
                     {
                         fprintf(dump_file, "Successfully retrieved both function 1 and two, the addresses are as follows: %p,  %p \n", (void*)functionOne, (void*)functionTwo);
                     }
+
+                    // Over here we can check if basic blocks are the same.
+                    int basicBlockCountForFunctionOne = 0;
+                    int basicBlockCountForFunctionTwo = 0;
+                    basic_block bb;
+
+                    // We can use that macro Professor Chris Tyler suggested in the project stage 1 wikie
+                    FOR_EACH_BB_FN(bb, functionOne) {
+                        basicBlockCountForFunctionOne++;
+                    }
+
+                    // Same thing here for function two
+                    FOR_EACH_BB_FN(bb, functionTwo) {
+                        basicBlockCountForFunctionTwo++;
+                    }
+
+                    // Set a flag
+                    bool identical = false;
+                    // What im doing here is checking if the basic block count is the same. The logic is that if the number of basic block counts differ across functions
+                    // that means its most likely not identical.
+                    if (basicBlockCountForFunctionOne == basicBlockCountForFunctionTwo) {
+                        identical = true;
+                    }
+
+                    // Now check if it passes the first check
+                    if(identical) {
+                        // Now we can compare the gimple statement counts in each of the basic blocks
+                        // Found the macro ENTRY_BLOCK_PTR_FOR_FN here -> https://github.com/gcc-mirror/gcc/blob/master/gcc/basic-block.h
+                        basic_block basicBlockForFunctionOne = ENTRY_BLOCK_PTR_FOR_FN(functionOne)->next_bb;
+                        basic_block basicBlockForFunctionTwo = ENTRY_BLOCK_PTR_FOR_FN(functionTwo)->next_bb;
+
+                        while (basicBlockForFunctionOne && basicBlockForFunctionTwo && identical) {
+                            // We can now count for the gimple statements
+                            int gimpleCountForFunctionOne = 0;
+                            int gimpleCountForFunctionTwo = 0;
+                            for (gimple_stmt_iterator gsi = gsi_start_bb(basicBlockForFunctionOne); !gsi_end_p(gsi); gsi_next(&gsi)) {
+                                gimpleCountForFunctionOne++;
+                            }
+
+                            for (gimple_stmt_iterator gsi = gsi_start_bb(basicBlockForFunctionTwo); !gsi_end_p(gsi); gsi_next(&gsi)) {
+                                gimpleCountForFunctionTwo++;
+                            }
+
+                            if (gimpleCountForFunctionOne != gimpleCountForFunctionTwo) {
+                                identical = false;
+                                break;
+                            }
+
+                            // So if it passes the check above we can now compare the statements in parallel
+                            gimple_stmt_iterator gsiIteratorForFunctionOne = gsi_start_bb(basicBlockForFunctionOne);
+                            gimple_stmt_iterator gsiIteratorForFunctionTwo = gsi_start_bb(basicBlockForFunctionTwo);
+
+                            while(!gsi_end_p(gsiIteratorForFunctionOne) && !gsi_end_p(gsiIteratorForFunctionTwo)) {
+                                gimple *statementFromFunctionOne = gsi_stmt(gsiIteratorForFunctionOne);
+                                gimple *statementFromFunctionTwo = gsi_stmt(gsiIteratorForFunctionTwo);
+
+                                // Here we can ignore the variable names using gimple code
+                                if (gimple_code(statementFromFunctionOne) != gimple_code(statementFromFunctionTwo)){
+                                    identical = false;
+                                    break;
+                                }
+
+                                // Compare operands
+                                if (gimple_num_ops(statementFromFunctionOne) != gimple_num_ops(statementFromFunctionTwo)) {
+                                    identical =false;
+                                    break;
+                                }
+
+                                gsi_next(&gsiIteratorForFunctionOne);
+                                gsi_next(&gsiIteratorForFunctionTwo);
+                            }
+                            basicBlockForFunctionOne = basicBlockForFunctionOne->next_bb;
+                            basicBlockForFunctionTwo = basicBlockForFunctionTwo->next_bb;
+                        }
+                    }
+                    
+                    // Now just print the PRUNE / NOPRUNE MESSAGE
+                    if (identical) {
+                        fprintf(dump_file, "PRUNE: %s\n", baseName.c_str());
+                    }
+                    else {
+                        fprintf(dump_file, "NOPRUNE: %s\n", baseName.c_str());
+                    }
+
                 }
             }
     };
