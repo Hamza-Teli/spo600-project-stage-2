@@ -303,7 +303,7 @@ namespace{
 
                     // GIMPLE check -----------------------------------------------------------------------------------------------
                     bool gimpleCodeAndOpsCheck =  are_functions_identical_by_gimple_code_and_ops(functionOne, functionTwo);
-                    fprintf(dump_file, "%d for gimpleCodeAndOpsCheck", gimpleCodeAndOpsCheck);
+                    fprintf(dump_file, "%d for gimpleCodeAndOpsCheck. (1 means pass, 0 means fail)\n", gimpleCodeAndOpsCheck);
 
                     // Set a flag
                     bool identical = true;
