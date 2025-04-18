@@ -47,7 +47,7 @@ namespace{
     };
 
     // Then we can store it in a map
-    std::map<std::string, FunctionMeta> functionMap;
+    static std::map<std::string, FunctionMeta> functionMap;
 
 
     const pass_data pass_data_hteli1 = {
@@ -116,12 +116,13 @@ namespace{
                     fprintf(dump_file, "---------------------------\n");
                 }
 
+                print_function_map_summary();
+
                 // Return value
                 return 0;
             }
             
             
-
             // Get the number of basic blocks
             size_t get_number_of_basic_blocks(function *func) {
                 // Instantiate counter
@@ -158,6 +159,24 @@ namespace{
                 }
 
                 return count;
+            }
+
+            // Print the entire map; called at end of each execute, but only
+            // the last invocation will show the full dataset.
+            void print_function_map_summary() const {
+                if (!dump_file)
+                    return;
+
+                fprintf(dump_file, "\n=== FunctionMap Summary (end of current execute) ===\n");
+                for (const auto &pair : functionMap) {
+                    const auto &m = pair.second;
+                    fprintf(dump_file,
+                            "Function: %s, BasicBlocks: %zu, GIMPLEs: %zu\n",
+                            m.name.c_str(),
+                            m.basicBlockCount,
+                            m.gimpleCount);
+                }
+                fprintf(dump_file, "=== End Summary ===\n");
             }
     };
 }
