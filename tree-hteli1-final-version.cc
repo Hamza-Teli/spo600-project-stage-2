@@ -162,7 +162,7 @@ namespace{
             }
 
             // Print the entire map; called at end of each execute, but only
-            // the last invocation will show the full dataset.
+            // the last iteration will show the full dataset. ---> THIS IS A LIMITATION!
             void print_function_map_summary() const {
                 if (!dump_file)
                     return;
@@ -173,7 +173,7 @@ namespace{
                     const auto &baseEntry = pair.second;
                     const std::string &baseName = baseEntry.name;
             
-                    // Skip functions that are not base (i.e., have a dot in their name)
+                    // Skip functions that are not base
                     if (baseName.find('.') != std::string::npos)
                         continue;
             
@@ -184,7 +184,6 @@ namespace{
                     if (functionMap.find(resolverName) == functionMap.end())
                         continue; // No resolver, skip
             
-                    // Now gather all variants that start with baseName + "." and are NOT the resolver
                     std::vector<FunctionMeta> variants;
                     for (const auto &innerPair : functionMap) {
                         const std::string &variantName = innerPair.first;
