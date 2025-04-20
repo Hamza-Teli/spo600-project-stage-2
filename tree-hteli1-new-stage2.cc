@@ -168,14 +168,54 @@ namespace{
                     return;
 
                 fprintf(dump_file, "\n=== FunctionMap Summary (end of current execute) ===\n");
+                
                 for (const auto &pair : functionMap) {
-                    const auto &m = pair.second;
-                    fprintf(dump_file,
-                            "Function: %s, BasicBlocks: %zu, GIMPLEs: %zu\n",
-                            m.name.c_str(),
-                            m.basicBlockCount,
-                            m.gimpleCount);
+                    const auto &baseEntry = pair.second;
+                    const std::string &baseName = baseEntry.name;
+            
+                    // Skip functions that are not base (i.e., have a dot in their name)
+                    if (baseName.find('.') != std::string::npos)
+                        continue;
+            
+                    // Construct resolver name
+                    std::string resolverName = baseName + ".resolver";
+            
+                    // Check if resolver exists
+                    if (functionMap.find(resolverName) == functionMap.end())
+                        continue; // No resolver, skip
+            
+                    // Now gather all variants that start with baseName + "." and are NOT the resolver
+                    std::vector<FunctionMeta> variants;
+                    for (const auto &innerPair : functionMap) {
+                        const std::string &variantName = innerPair.first;
+                        if (variantName.find(baseName + ".") == 0 &&
+                            variantName != resolverName) {
+                            variants.push_back(innerPair.second);
+                        }
+                    }
+            
+                    // Compare base function with each variant
+                    for (const auto &variant : variants) {
+                        fprintf(dump_file,
+                                "Comparing base '%s' with variant '%s'\n",
+                                baseName.c_str(), variant.name.c_str());
+            
+                        if (variant.basicBlockCount == baseEntry.basicBlockCount &&
+                            variant.gimpleCount == baseEntry.gimpleCount) {
+                                fprintf(dump_file,
+                                    "PRUNE: %s (BB: %zu, GIMPLE: %zu) and %s (BB: %zu, GIMPLE: %zu) are identical\n",
+                                    baseName.c_str(), baseEntry.basicBlockCount, baseEntry.gimpleCount,
+                                    variant.name.c_str(), variant.basicBlockCount, variant.gimpleCount);
+                        
+                        } else {
+                            fprintf(dump_file,
+                                "NOPRUNE: %s (BB: %zu, GIMPLE: %zu) and %s (BB: %zu, GIMPLE: %zu) differ\n",
+                                baseName.c_str(), baseEntry.basicBlockCount, baseEntry.gimpleCount,
+                                variant.name.c_str(), variant.basicBlockCount, variant.gimpleCount);
+                        }
+                    }
                 }
+
                 fprintf(dump_file, "=== End Summary ===\n");
             }
     };
